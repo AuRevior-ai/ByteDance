@@ -5,19 +5,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        canvas: "#0A0D12",
-        panel: "#12161F",
-        panelSoft: "#1A202C",
-        line: "#2E3544",
-        ink: "#F6F7FB",
-        muted: "#9BA3B4",
-        accent: "#4F8CFF",
-        mint: "#21C58B",
-        amber: "#F4B84A",
-        danger: "#F05D5E",
+        canvas: "#F4F7FB",
+        panel: "#FFFFFF",
+        panelSoft: "#F7F9FD",
+        line: "#DFE7F4",
+        ink: "#111827",
+        muted: "#6B7280",
+        accent: "#7B61FF",
+        mint: "#33C481",
+        amber: "#F59E0B",
+        danger: "#EF4444",
       },
       boxShadow: {
-        workstation: "0 24px 80px rgba(0, 0, 0, 0.38)",
+        workstation: "0 18px 45px rgba(111, 124, 161, 0.10)",
       },
     },
   },
@@ -25,4 +25,3 @@ const config: Config = {
 };
 
 export default config;
-

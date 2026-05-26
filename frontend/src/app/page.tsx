@@ -1,6 +1,5 @@
-import { WorkspaceShell } from "@/components/layout/workspace-shell";
+import { AgentHubStaticPage } from "@/components/agenthub-ui/agenthub-static-page";
 
 export default function HomePage() {
-  return <WorkspaceShell />;
+  return <AgentHubStaticPage />;
 }
-
