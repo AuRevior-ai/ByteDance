@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ConversationMode {
+  single
+  group
+}
+
+enum MessageRole {
+  user
+  assistant
+  system
+  agent
+}
+
+enum MessageType {
+  text
+  code
+  artifact
+  trace
+}
+
+enum ArtifactType {
+  code
+  html
+  diff
+  document
+  deployment
+  file
+}
+
+enum TraceStatus {
+  running
+  success
+  failed
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  agents Agent[]
+}
+
+model Agent {
+  id           String   @id @default(cuid())
+  name         String
+  avatar       String?
+  description  String
+  systemPrompt String
+  capabilities String[]
+  tools        String[]
+  provider     String
+  model        String
+  isBuiltin    Boolean  @default(false)
+  createdById  String?
+  createdBy    User?    @relation(fields: [createdById], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Conversation {
+  id               String           @id @default(cuid())
+  title            String
+  mode             ConversationMode @default(group)
+  agentIds         String[]
+  pinnedMessageIds String[]
+  archived         Boolean          @default(false)
+  pinned           Boolean          @default(false)
+  lastActiveAt     DateTime         @default(now())
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  messages  Message[]
+  artifacts Artifact[]
+  traces    Trace[]
+}
+
+model Message {
+  id              String      @id @default(cuid())
+  conversationId  String
+  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role            MessageRole
+  agentId         String?
+  content         String
+  type            MessageType @default(text)
+  artifactIds     String[]
+  parentMessageId String?
+  createdAt       DateTime    @default(now())
+
+  artifacts Artifact[]
+  traces    Trace[]
+}
+
+model Artifact {
+  id               String       @id @default(cuid())
+  conversationId   String
+  conversation     Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  messageId        String
+  message          Message      @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  type             ArtifactType
+  title            String
+  content          String
+  language         String?
+  previewUrl       String?
+  currentVersionId String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  versions ArtifactVersion[]
+}
+
+model ArtifactVersion {
+  id               String   @id @default(cuid())
+  artifactId       String
+  artifact         Artifact @relation(fields: [artifactId], references: [id], onDelete: Cascade)
+  version          Int
+  content          String
+  changeSummary    String
+  createdByAgentId String?
+  createdAt        DateTime @default(now())
+
+  @@unique([artifactId, version])
+}
+
+model Trace {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  messageId      String?
+  message        Message?     @relation(fields: [messageId], references: [id], onDelete: SetNull)
+  taskPlan       Json
+  agentCalls     Json
+  status         TraceStatus  @default(running)
+  totalDuration  Int?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Deployment {
+  id         String   @id @default(cuid())
+  artifactId String
+  status     String
+  previewUrl String?
+  logs       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+

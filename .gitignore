@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build outputs
+.next/
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+
+# runtime files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment files
+.env
+.env.*
+!.env.example
+
+# database and local storage
+*.db
+*.db-journal
+uploads/
+storage/
+
+# generated artifacts
+demo/*.mp4
+demo/screenshots/*.png
+demo/screenshots/*.jpg
+
+# editor and OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+

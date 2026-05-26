@@ -1,0 +1,21 @@
+{
+  "name": "agenthub-studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AgentHub Studio - IM-style multi-agent collaboration platform.",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "dev:frontend": "pnpm --filter @agenthub/frontend dev",
+    "dev:backend": "pnpm --filter @agenthub/backend start:dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "format": "pnpm -r format"
+  },
+  "engines": {
+    "node": ">=20.11.0",
+    "pnpm": ">=9.0.0"
+  }
+}
+
